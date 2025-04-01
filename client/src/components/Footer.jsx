@@ -84,6 +84,10 @@ const Footer = () => {
           </ul>
         </div>
       </div>
+      <h2 className="text-center m-4">
+        Copyright © 2025 <span className="text-blue-500">PrintMine.in</span> all
+        rights reserved.
+      </h2>
     </footer>
   );
 };

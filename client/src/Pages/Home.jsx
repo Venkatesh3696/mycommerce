@@ -1,9 +1,23 @@
 import ImageCarousel from "@/components/Image-Carousel";
 import ProductCard from "@/components/ProductCard";
 import { bannerImages, products } from "@/lib/data";
-import React from "react";
+import API from "@/utils/axiosInstance";
+import React, { useEffect } from "react";
 
 const Home = () => {
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await API.get("/api/products");
+        console.log(response.data);
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchProducts();
+  }, []);
+
   return (
     <div className="mt-6">
       <ImageCarousel imageLinks={bannerImages} />
@@ -53,7 +67,6 @@ const Home = () => {
       </section>
       {/* Product Cards */}
       <div className="flex items-center gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar h-80 mt-5">
-        {" "}
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

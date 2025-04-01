@@ -1,7 +1,9 @@
 import { User } from "../models/user.model.js";
 import { Product } from "../models/product.model.js";
+import { uploadImage } from "../utils/cloudinary.js";
 
 export const getProducts = async (req, res) => {
+  console.log("gettting products");
   try {
     const products = await Product.find({});
     res.status(200).json(products);
@@ -24,12 +26,30 @@ export const getProductById = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, price, description } = req.body;
-    const newProduct = new Product({ name, price, description });
+    const { name, price, description, category } = req.body;
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+    const image = await uploadImage(req.file.path);
+
+    console.log("Creating product", image);
+
+    if (!name || !price || !description || !category || !image) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    const newProduct = new Product({
+      name,
+      price,
+      description,
+      category,
+      image,
+    });
     await newProduct.save();
     res.status(201).json(newProduct);
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    console.log(error);
+    res.status(500).json({ message: "Server error", error });
   }
 };
 

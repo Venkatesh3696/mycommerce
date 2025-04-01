@@ -23,7 +23,6 @@ const userSchema = new Schema({
   },
 });
 
-// Hash password before saving user
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
@@ -33,19 +32,16 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// Compare password
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Generate JWT token
 userSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
 };
 
-// Generate reset password token
 userSchema.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(20).toString("hex");
 

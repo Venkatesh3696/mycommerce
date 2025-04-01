@@ -6,14 +6,16 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/product.controller.js";
-import { protect } from "../middleware/auth.middleware.js";
+import { upload } from "../utils/cloudinary.js";
+import { isAdmin } from "../middleware/auth.middleware.js";
+// import { protect } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
 router.get("/", getProducts);
 router.get("/:id", getProductById);
-router.post("/", protect, createProduct);
-router.put("/:id", protect, updateProduct);
-router.delete("/:id", protect, deleteProduct);
+router.post("/", isAdmin, upload.single("image"), createProduct);
+router.put("/:id", isAdmin, updateProduct);
+router.delete("/:id", isAdmin, deleteProduct);
 
 export default router;

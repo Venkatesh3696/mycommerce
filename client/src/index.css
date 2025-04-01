@@ -129,4 +129,11 @@
   .footer-name {
     @apply hover:text-white text-gray-500;
   }
+  .popup {
+    @apply fixed inset-0 bg-black  flex items-center justify-center z-50;
+  }
+
+  .popup-content {
+    @apply bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-md;
+  }
 }
